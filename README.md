@@ -24,18 +24,21 @@ public async Task HelloWorld()
     context.Response.Body.Write(bytes, 0, bytes.Length);
   };
   
-  _instance.Rules.Add(matcher, manipulator); // rules can be added, deleted or updated
+  // rules can be added, deleted or updated
+  _instance.Rules.Add(matcher, manipulator);
   
   using (var server = new Core.StubServer())
   {
+    // starting the server is super important!
     server.Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
 
+    // fetch via http
     using (var client = new HttpClient())
     {
-      var response = await client.GetAsync(server.Address + @"/hello/world"); // fetch via http
-      Assert.AreEqual(200, (int) response.StatusCode);
+      using(var response = await client.GetAsync(server.Address + @"/hello/world")) {
+        Assert.AreEqual(200, (int) response.StatusCode);
+      }
     }
-
   }
 }
 ```
