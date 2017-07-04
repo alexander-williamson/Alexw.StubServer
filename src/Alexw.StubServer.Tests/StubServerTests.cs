@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Alexw.StubServer.Core;
 using NUnit.Framework;
 
@@ -8,19 +10,27 @@ namespace Alexw.StubServer.Tests
     [TestFixture]
     public class StubServerTests
     {
-        public SelfHostedStubServer Instance { get; }
+        private Core.StubServer _instance;
 
-        public StubServerTests(SelfHostedStubServer instance)
+        [SetUp]
+        public void SetUp()
         {
-            Instance = instance;
+            _instance = new Core.StubServer();
+            _instance.Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _instance.Dispose();
         }
 
         [Test]
-        public void Beans()
+        public async Task RulesExists_ValidRequest_RequestManipulated()
         {
-            Instance..Add(context =>
+            _instance.Rules.Add(context =>
             {
-                return context.Request.Uri.PathAndQuery.StartsWith("//hello//world");
+                return context.Request.Uri.PathAndQuery.StartsWith(@"/hello/world");
             }, context =>
             {
                 var bytes = Encoding.UTF8.GetBytes("hello world");
@@ -29,10 +39,23 @@ namespace Alexw.StubServer.Tests
 
             using (var client = new HttpClient())
             {
-                client.GetAsync(Instance.
+
+                var response = await client.GetAsync(_instance.Address + @"/hello/world");
+
+                Assert.AreEqual(200, (int) response.StatusCode);
             }
         }
 
-        
+        [Test]
+        public async Task RuleDoesNotExist_ValidRequest_Returns404()
+        {
+            using (var client = new HttpClient())
+            {
+
+                var response = await client.GetAsync(_instance.Address + @"/does/not/match");
+
+                Assert.AreEqual(404, (int)response.StatusCode);
+            }
+        }
     }
 }

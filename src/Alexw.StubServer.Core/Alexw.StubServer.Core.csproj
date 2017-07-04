@@ -61,7 +61,6 @@
     <Compile Include="RecordedRequest.cs" />
     <Compile Include="Middleware\RecordRequests.cs" />
     <Compile Include="Rules.cs" />
-    <Compile Include="SelfHostedStubServer.cs" />
     <Compile Include="StubServer.cs" />
     <Compile Include="TcpPorts.cs" />
   </ItemGroup>
