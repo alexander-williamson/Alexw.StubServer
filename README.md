@@ -4,7 +4,7 @@ Create an in-memory stub server for testing or super simple hosting
 # Using
 Checkout the [src/Alexw.StubServer.Tests](src/Alexw.StubServer.Tests) folder for examples, but basically:
 
-## Setup a json response at /api/example
+## Setup a json response at /hello/world
 In this example, you see how to setup a server, run tests against it, and verify your the call.
 You can use the servers RecordedCall collection to access calls (or to clear them).
 You can manipulate calls based on the Rules collection, which can be ordered or updated.
