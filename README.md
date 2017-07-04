@@ -2,7 +2,7 @@
 Create an in-memory stub server for testing or super simple hosting
 
 # Using
-Checkout the [src/Tests](src/Tests) folder for examples, but basically:
+Checkout the [src/Alexw.StubServer.Tests](src/Alexw.StubServer.Tests) folder for examples, but basically:
 
 ## Setup a json response at /api/example
 ```csharp
@@ -17,28 +17,25 @@ public async Task HelloWorld()
   };
 
   // what to do if the rule runs, like returning a string
+  // again, full access to the context
   Action<IOwinContext> manipulator = context =>
   {
     var bytes = Encoding.UTF8.GetBytes("hello world");
     context.Response.Body.Write(bytes, 0, bytes.Length);
   };
-
-  // rules can be added, deleted or updated (as this is just a Dictionary)
-  _instance.Rules.Add(matcher, manipulator);
-
-  // start the stub srever
+  
+  _instance.Rules.Add(matcher, manipulator); // rules can be added, deleted or updated
+  
   using (var server = new Core.StubServer())
   {
-    // start the server at the address and port given (TcpPorts is a helper function provided in this library)
     server.Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
 
-    // create a new httpclient, and request the path using the address from the 
     using (var client = new HttpClient())
     {
-      var response = await client.GetAsync(server.Address + @"/hello/world");
+      var response = await client.GetAsync(server.Address + @"/hello/world"); // fetch via http
       Assert.AreEqual(200, (int) response.StatusCode);
     }
 
-  } // kill the stub server
+  }
 }
 ```
