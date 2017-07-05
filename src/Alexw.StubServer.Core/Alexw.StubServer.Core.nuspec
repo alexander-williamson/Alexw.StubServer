@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Alexw.StubServer.Core</id>
+    <version>1.0.0</version>
+    <description>An rule based in-memory stub server which records calls, great for testing or stubbing live endpoints</description>
+    <authors>@_alexw</authors>
+  </metadata>
+  <files>
+    <file src="bin\Release\*.dll" target="lib\net45" />
+  </files>
+</package>
