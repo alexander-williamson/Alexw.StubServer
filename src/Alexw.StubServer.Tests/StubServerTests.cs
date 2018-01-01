@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +75,20 @@ namespace Alexw.StubServer.Tests
 
                 Assert.AreEqual(404, (int)response.StatusCode);
             }
+        }
+
+        [Test]
+        public async Task ValidRequest_LimitApplied()
+        {
+            using (var client = new HttpClient())
+            {
+                for (var i = 0; i < 300; i++)
+                {
+                    await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, new Uri(_instance.Address)));
+                }
+            }
+
+            Assert.AreEqual(250, _instance.Recorded.Count());
         }
     }
 }

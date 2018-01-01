@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,19 +9,25 @@ namespace Alexw.StubServer.Core.Middleware
 {
     public class RecordRequests : OwinMiddleware
     {
-        private readonly IList<RecordedRequest> _recordedRequests;
+        private const int Limit = 250;
+        private readonly ConcurrentStack<RecordedRequest> _recordedRequests;
 
-        public RecordRequests(OwinMiddleware next, IList<RecordedRequest> recordedRequests) : base(next)
+        public RecordRequests(OwinMiddleware next, ConcurrentStack<RecordedRequest> recordedRequests) : base(next)
         {
             _recordedRequests = recordedRequests;
         }
 
         public override async Task Invoke(IOwinContext context)
         {
+            while (_recordedRequests.Count >= Limit)
+            {
+                _recordedRequests.TryPop(out RecordedRequest _);
+            }
+
             using (var ms = new MemoryStream())
             {
                 context.Request.Body.CopyTo(ms);
-                _recordedRequests.Add(new RecordedRequest
+                _recordedRequests.Push(new RecordedRequest
                 {
                     Headers = context.Request.Headers.ToDictionary(k => k.Key, v => v.Value),
                     Body = Encoding.UTF8.GetString(ms.ToArray()),

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Alexw.StubServer.Core.Middleware;
 using Microsoft.Owin.Hosting;
@@ -8,7 +9,8 @@ namespace Alexw.StubServer.Core
 {
     public class StubServer : IDisposable
     {
-        public List<RecordedRequest> Recorded { get; } = new List<RecordedRequest>();
+        public ConcurrentStack<RecordedRequest> Recorded { get; } = new ConcurrentStack<RecordedRequest>(new List<RecordedRequest>());
+
         public string Address { get; set; }
 
         public Rules Rules = new Rules();
