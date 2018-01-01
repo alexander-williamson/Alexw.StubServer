@@ -1,5 +1,5 @@
 # Alexw.StubServer
-Create an in-memory stub server for testing or super simple hosting
+Create an in-memory rules based recording stub server for testing or super simple hosting.
 
 # Getting started
 Install the latest [Alexw.StubServer.Core NuGet package](https://www.nuget.org/packages/Alexw.StubServer.Core) to your project and follow the guide below.
