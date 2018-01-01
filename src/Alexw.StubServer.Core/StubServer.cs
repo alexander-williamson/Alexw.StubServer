@@ -9,7 +9,7 @@ namespace Alexw.StubServer.Core
 {
     public class StubServer : IDisposable
     {
-        public ConcurrentStack<RecordedRequest> Recorded { get; } = new ConcurrentStack<RecordedRequest>(new List<RecordedRequest>());
+        public ConcurrentQueue<RecordedRequest> Recorded { get; } = new ConcurrentQueue<RecordedRequest>(new List<RecordedRequest>());
 
         public string Address { get; set; }
 

@@ -84,11 +84,13 @@ namespace Alexw.StubServer.Tests
             {
                 for (var i = 0; i < 300; i++)
                 {
-                    await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, new Uri(_instance.Address)));
+                    await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, $"{_instance.Address}/{i}"));
                 }
             }
 
-            Assert.AreEqual(250, _instance.Recorded.Count());
+            Assert.AreEqual(250, _instance.Recorded.Count);
+            Assert.AreEqual($"{_instance.Address}/50", _instance.Recorded.First().Uri.ToString());
+            Assert.AreEqual($"{_instance.Address}/299", _instance.Recorded.Last().Uri.ToString());
         }
     }
 }

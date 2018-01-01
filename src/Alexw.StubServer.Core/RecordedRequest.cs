@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Alexw.StubServer.Core
 {
@@ -10,5 +11,6 @@ namespace Alexw.StubServer.Core
         public string Scheme { get; set; }
         public string RemoteIpAddress { get; set; }
         public int? RemotePort { get; set; }
+        public Uri Uri { get; set; }
     }
 }
