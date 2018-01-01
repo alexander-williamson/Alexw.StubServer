@@ -1,7 +1,13 @@
 # Alexw.StubServer
 Create an in-memory stub server for testing or super simple hosting
 
-# Using
+# Getting started
+Install the latest [Alexw.StubServer.Core NuGet package](https://www.nuget.org/packages/Alexw.StubServer.Core) to your project and follow the guide below.
+
+```powershell
+Install-Package Alexw.StubServer.Core
+```
+
 Checkout the [src/Alexw.StubServer.Tests](src/Alexw.StubServer.Tests) folder for examples, but basically:
 
 ## Setup a response at /hello/world
@@ -33,9 +39,6 @@ public async Task HelloWorld()
 
     // rules can be added, deleted or updated
     server.Rules.Add(matcher, manipulator);
-
-    // starting the server is super important!
-    server.Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
 
     // fetch via http
     using (var client = new HttpClient())
