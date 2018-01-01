@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alexw.StubServer.Core", "src\Alexw.StubServer.Core\Alexw.StubServer.Core.csproj", "{A4910393-A521-4335-9796-8A1D0887F070}"
 EndProject
@@ -29,5 +29,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C880877-5852-4B5D-B1D2-DB009494ED85} = {106D55EC-08DA-43F0-8B91-214F7A60B019}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A9BF75C-A004-43F2-81F4-13EC70C4ACCB}
 	EndGlobalSection
 EndGlobal
