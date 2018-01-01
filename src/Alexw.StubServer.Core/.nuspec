@@ -10,6 +10,6 @@
     <projectUrl>https://github.com/3686/Alexw.StubServer</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Alexander Williamson</copyright>
+    <copyright>$copyright$</copyright>
   </metadata>
 </package>
