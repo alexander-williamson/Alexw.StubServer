@@ -1,7 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Alexw.StubServer.Core;
 using NUnit.Framework;
 
 namespace Alexw.StubServer.Tests
@@ -15,7 +15,6 @@ namespace Alexw.StubServer.Tests
         public void SetUp()
         {
             _instance = new Core.StubServer();
-            _instance.Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
         }
 
         [TearDown]
@@ -24,13 +23,24 @@ namespace Alexw.StubServer.Tests
             _instance.Dispose();
         }
 
+        [TestCase("invalid-uri")]
+        [TestCase("")]
+        [TestCase(null)]
+        public void Constructing_InvalidAddress_ThrowsArgumentException(string argument)
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                using (new Core.StubServer(argument))
+                {
+                    // do nothing
+                }
+            });
+        }
+
         [Test]
         public async Task RulesExists_ValidRequest_RequestManipulated()
         {
-            _instance.Rules.Add(context =>
-            {
-                return context.Request.Uri.PathAndQuery.StartsWith(@"/hello/world");
-            }, context =>
+            _instance.Rules.Add(context => context.Request.Uri.PathAndQuery.StartsWith(@"/hello/world"), context =>
             {
                 var bytes = Encoding.UTF8.GetBytes("hello world");
                 context.Response.Body.Write(bytes, 0, bytes.Length);
@@ -38,7 +48,6 @@ namespace Alexw.StubServer.Tests
 
             using (var client = new HttpClient())
             {
-
                 var response = await client.GetAsync(_instance.Address + @"/hello/world");
 
                 Assert.AreEqual(200, (int) response.StatusCode);
@@ -50,8 +59,18 @@ namespace Alexw.StubServer.Tests
         {
             using (var client = new HttpClient())
             {
-
                 var response = await client.GetAsync(_instance.Address + @"/does/not/match");
+
+                Assert.AreEqual(404, (int)response.StatusCode);
+            }
+        }
+
+        [Test]
+        public async Task NoRules_ValidRequest_Returns404()
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync(_instance.Address);
 
                 Assert.AreEqual(404, (int)response.StatusCode);
             }

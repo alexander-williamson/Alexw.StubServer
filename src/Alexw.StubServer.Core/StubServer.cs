@@ -8,19 +8,27 @@ namespace Alexw.StubServer.Core
 {
     public class StubServer : IDisposable
     {
-        public List<RecordedRequest> Recorded { get; }
+        public List<RecordedRequest> Recorded { get; } = new List<RecordedRequest>();
         public string Address { get; set; }
 
-        public Rules Rules;
+        public Rules Rules = new Rules();
         private IDisposable _webServer;
 
         public StubServer()
         {
-            Recorded = new List<RecordedRequest>();
-            Rules = new Rules();
+            Start("http://localhost:" + TcpPorts.GetFreeTcpPort());
         }
 
-        public void Start(string address)
+        public StubServer(string address)
+        {
+            if (!Uri.IsWellFormedUriString(address, UriKind.Absolute))
+            {
+                throw new ArgumentException("Not a valid absolute Uri", nameof(address));
+            }
+            Start(address);
+        }
+
+        private void Start(string address)
         {
             Address = address;
             _webServer = WebApp.Start(new StartOptions(address), Configuration);
